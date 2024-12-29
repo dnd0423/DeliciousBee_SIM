@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>포럼</title>
+   <!-- 부트스트랩 CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+   <style>
+      body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+     header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }   
+     
+    .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+     }
+       h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            flex: content;
+        }
+        
+        .list-box{
+        	margin: 1em 0;
+            background-color: #e0e0e0;
+            color: #666;
+            border-radius: 10px;
+        
+        }
+        
+        .list-box th , td{
+        	text-align: center;
+        
+        }
+        .center{
+        	text-align: center;
+        	padding: 3em 0;
+        }
+        
+        .nav-box{
+        	 position: relative;  /* 부모를 기준으로 자식 요소 배치 */
+   			 width: 100%;         /* 부모 요소가 전체 너비 차지 */
+
+        }
+        
+        .nav-box .left{
+        	position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        .nav-box .right{
+        	position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        .center .searchInput{
+        	width: 200px;
+        	display: inline;
+        }
+  </style>
+  
+  <script>
+  	function search() {
+  		let searchText = document.getElementById("searchText").value;
+  		location.href = "/community/list?searchText=" + searchText;
+  	}
+  </script>
+</head>
+<body>
+<header>
+<div id="container">
+  <div class="header-content">
+  
+  	<h1>포럼</h1>
+  
+  </div>
+</header>
+  <p>
+  
+  <div class="nav-box">
+  	
+  	<!-- 이전 페이지가 없을 경우 보여주지 않음 -->
+  	<th:block th:if="${navi.currentPage > 1}">
+  	  <a th:href="@{/community/list(page=${navi.currentPage - 1},searchText=${searchText})}" class="left btn btn-outline-warning"> 이전</a>&nbsp;&nbsp;
+  	</th:block>
+  	
+  	<!-- 다음 페이지가 없을 경우 보여주지 않음 -->
+    <th:block th:if="${navi.currentPage < navi.totalPageCount}">
+      <a th:href="@{/community/list(page=${navi.currentPage + 1},searchText=${searchText})}" class="right btn btn-outline-warning"> 다음 </a>&nbsp;&nbsp;
+    </th:block>
+  </div>
+  
+  
+  <div class="list-box">
+  <table class="table">
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">제목</th>
+      <th scope="col">작성자</th>
+      <th scope="col">작성일</th>
+      <th scope="col">조회수</th>
+    </tr>
+    <tr th:each="board : ${boardList}">
+     	   <td scope="row" class="center" th:text = "${boardStat.count}">일련번호</td>
+      	   <td class= "center"><a th:text = "${board.title}" th:href="@{/community/read(id=${board.id})}"></a></td>
+      	   <td class="center" th:text= "${board.member?.name}">" "</td>
+           <td class= "center" th:text = "${#temporals.format(board.createdTime, 'yyyy-MM-dd')}"></td>
+           <td class="center" th:text="${board.hit}">
+    </tr>
+  </table>
+  </div>
+  <p>
+  
+  <div class="center">
+    <label for="searchText">검색</label>
+    <input type="search" id="searchText" name="searchText" th:value="${searchText}" class="form-control searchInput">
+    <input type="button" value="검색" onclick="search()" class="btn btn-warning">
+  </div>
+  
+  
+  <div class="center">
+    <input type="button" onclick="location.href='/'" value="메인으로" class="btn btn-warning">
+    <input type="button" onclick="location.href='/community/write'" value="글쓰기" class="btn btn-warning">
+  </div>
+</div>
+</body>
+</html>

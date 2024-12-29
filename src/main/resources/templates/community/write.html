@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>글쓰기 페이지</title>
+<!-- 부트스트랩 CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+     header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }   
+     
+    .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+     }
+      h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            flex: content;
+        }
+      .writeform{
+       		margin: 3rem 0;
+            color: #666;
+            display: flex;
+            justify-content: center;
+    		align-items: center;
+      }
+      
+      .center{
+        	text-align: center;
+        }
+        
+       .error{
+       		color: red;
+       }
+       table{
+       		text-align: center;
+       		display: flex;
+       } 
+       
+       form{
+       		
+       }
+       
+       #titlenullcheck{
+       	width: 500px;
+       	margin-left: 10px;
+       	margin-top: 5px;
+       }
+       
+       #contentnullcheck{
+       	width:500px;
+       	height: 280px;
+       	margin-left:10px;
+       	margin-top: 5px;
+       	resize: none;
+       }
+       
+       
+       
+       
+</style>
+<script>
+function nullcheck() {
+    let title = document.getElementById("titlenullcheck");
+    let content = document.getElementById("contentnullcheck");
+
+    if(title === null || title.value.trim() === ""){
+        alert("제목을 입력해 주세요!");
+    }
+
+    if(content === null || content.value.trim() === ""){
+        alert("내용을 입력해 주세요!");
+    }
+}
+
+</script>
+</head>
+<body>
+<header>
+<div id="container">
+  <div class="header-content">
+  
+  	<h1>포럼</h1>
+  
+  </div>
+</header>
+  <p>
+  <div class="writeform">
+  <form action="write" method="post" th:object="${writeForm}" enctype="multipart/form-data">
+    <table>
+      <tr>
+        <th class="centercontent">제목</th>
+        <td>
+        <input class="centercontent" type="text" th:field="*{title}" id="titlenullcheck" >
+        <!-- <div class="error" th:errors="*{title}"></div> -->
+        </td>
+      </tr>
+      <tr>
+        <th class="centercontent">내용</th>
+        <td>
+        <textarea rows="10" cols="" th:field="*{content}" class="centercontent" id="contentnullcheck"></textarea>
+        <!--  <div class="error" th:errors="*{content}"></div>-->
+        </td>
+      </tr>
+      
+      <tr>
+        <th>첨부파일</th>
+        <td>
+          <input type="file" name="file">
+        </td>
+      </tr>
+      
+    </table>
+  
+    
+    <p>
+    <div class="center">
+      <input type="submit" onclick="nullcheck()" value="등록하기" class="btn btn-warning">
+      <input type="button" onclick="location.href='list'" value="돌아가기" class="btn btn-warning">
+    </div>
+  </form>
+  </div>
+</body>
+</html>

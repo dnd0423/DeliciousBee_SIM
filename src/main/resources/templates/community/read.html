@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>게시글 보기</title>
+<!-- 부트스트랩 CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+     header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }   
+     .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+     }
+      h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            flex: content;
+        }
+       table{
+       		text-align: center;
+       		display: flex;
+       		border: 1px solid black;
+       } 
+       .centercontent{
+        	margin: 3rem 0;
+            color: #666;
+            display: flex;
+            justify-content: center;
+    		align-items: center;
+       }
+       th{
+       	  width: 50px;
+       	  height: 50px;
+       }
+       
+       td{
+       	  width:500px;
+       }
+        .center{
+        	text-align: center;
+        }
+  </style>
+</head>
+<body>
+<header>
+<div id="container">
+  <div class="header-content">
+  
+  	<h1>포럼</h1>
+  
+  </div>
+</header>
+  <p>
+  <div class="centercontent">
+  <table th:object="${board}">
+      <tr>
+        <th>제목</th>
+      </tr>
+      <tr>
+      <td th:text="*{title}"></td>
+      </tr>
+      <tr>
+        <th>내용</th>
+      </tr>
+      <tr>
+       <td th:text="*{content}"></td>
+       </tr>
+      <tr>
+        <th>조회수</th>
+      </tr>
+      <tr>
+       <td th:text="*{hit}"></td>
+       </tr>
+      <tr>
+        <th>작성일</th>
+      </tr>
+      <tr>
+      <td th:text="*{#temporals.format(createdTime , 'yyyy-MM-dd HH:mm:ss')}"></td>
+      </tr>
+      <tr>
+        <th>작성자</th>
+      </tr>
+      <tr>
+       <td th:text="*{member.name}"></td>
+       </tr>
+      <tr>
+      <th>첨부파일</th>
+      </tr>
+       <tr th:if="${file != null}">       
+            <!-- 이미지 파일일 경우 -->
+            <td th:if="${isImage}">
+                <img th:src="@{${imageUrl}}" alt="첨부 이미지" style="max-width: 500px;">
+            </td>
+            <!-- 이미지가 아닐 경우 파일 다운로드 링크 -->
+            <td th:if="${!isImage}">
+                <a th:href="@{${downloadUrl}}" th:text="${file.original_filename}"></a>
+            </td>
+        </tr>
+    </table>
+    </div>
+    <p>
+    <div class="center">
+      <input type="button" onclick="location.href='/community/list'" value="목록" class="btn btn-warning">
+      <th:block th:if="${session.loginMember.member_id == board.member.member_id}">
+        <input type="button" th:onclick= "|location.href='/community/update?id=${board.id}'|" value="수정하기" class="btn btn-warning">
+        <input type="button" th:onclick= "|location.href='/community/delete?id=${board.id}'|" value="삭제하기" class="btn btn-warning">
+	  </th:block>
+	  <!--  <input type="hidden" name="id" th:value="${board.id}">-->
+  </div>
+ 
+</body>
+</html>
