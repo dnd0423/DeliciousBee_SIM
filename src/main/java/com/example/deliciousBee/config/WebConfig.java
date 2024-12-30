@@ -1,5 +1,6 @@
 package com.example.deliciousBee.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,8 @@ public class WebConfig implements WebMvcConfigurer { //거쳐서 서버켜라
 									"/*.css", "/*.js", "/*.ico", "/error"};
 	
 	
+	 @Value("${file.upload.path}")
+	 private String uploadPath;
 	
 	
 	//필터
@@ -73,9 +76,8 @@ public class WebConfig implements WebMvcConfigurer { //거쳐서 서버켜라
 	
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // '/uploads/**' 경로를 외부 경로와 매핑
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/uploads/"); 
+		 registry.addResourceHandler("/uploads/**")
+		 .addResourceLocations("file:" + uploadPath);
     }
 	
 	
